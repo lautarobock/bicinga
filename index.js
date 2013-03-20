@@ -22,13 +22,17 @@ var req = http.request(opt, function(res) {
 		var object = eval("("+msg+")");
 		
 		for(var i=0; i<object.length; i++ ) {
-			if ( object[i].StationID == (process.argv[2]||"107") ) {
-				//console.log(JSON.stringify(object[i]));
-				console.log("Estacion: " + object[i].StationName);
-				if ( parseInt(object[i].StationAvailableBikes) == 0 ) {
-					console.log("NO HAY BICICLETAS DISPONIBLES");
-				} else {
-					console.log("Enhorabuena!!! tienes " + object[i].StationAvailableBikes + " BICICLETAS DISPONIBLES");
+			if ( process.argv.length <=2 ) process.argv.push("107");
+			for(var j=2; j<process.argv.length; j++ ) {
+				if ( object[i].StationID == (process.argv[j]||"107") ) {
+					//console.log(JSON.stringify(object[i]));
+					console.log("Estacion: " + object[i].StationName);
+					if ( parseInt(object[i].StationAvailableBikes) == 0 ) {
+						console.log("NO HAY BICICLETAS DISPONIBLES");
+					} else {
+						console.log("Enhorabuena!!! tienes " + object[i].StationAvailableBikes + " BICICLETAS DISPONIBLES");
+					}
+					console.log("----");
 				}
 			}
 		} 
