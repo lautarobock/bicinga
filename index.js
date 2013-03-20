@@ -12,7 +12,7 @@ var msg = "";
 var req = http.request(opt, function(res) {
 	//console.log('STATUS:' + res.statusCode);
 	//console.log('HEADERS:' + JSON.stringify(res.handlers));
-	res.setEncoding('utf-8');
+	res.setEncoding('utf8');
 	res.on('data', function(chunk) {
 		//console.log(chunk);
 		msg += chunk;
@@ -26,11 +26,11 @@ var req = http.request(opt, function(res) {
 			for(var j=2; j<process.argv.length; j++ ) {
 				if ( object[i].StationID == (process.argv[j]||"107") ) {
 					//console.log(JSON.stringify(object[i]));
-					console.log("Estacion: " + object[i].StationName);
+					console.log("Estacion: " + format(object[i].StationName));
 					if ( parseInt(object[i].StationAvailableBikes) == 0 ) {
-						console.log("NO HAY BICICLETAS DISPONIBLES");
+						console.log("UNA PENA! NO HAY BICICLETAS DISPONIBLES! :(");
 					} else {
-						console.log("Enhorabuena!!! tienes " + object[i].StationAvailableBikes + " BICICLETAS DISPONIBLES");
+						console.log("Enhorabuena! tienes " + object[i].StationAvailableBikes + " BICICLETAS DISPONIBLES :)");
 					}
 					console.log("----");
 				}
@@ -38,6 +38,10 @@ var req = http.request(opt, function(res) {
 		} 
 	});
 });
+
+function format(string) {
+	return string.replace('&Agrave;','Á');
+}
 
 req.on('error', function(e) {
 	console.log('problem with the request: ' + e.message);
