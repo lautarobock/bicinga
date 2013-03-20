@@ -18,7 +18,20 @@ var req = http.request(opt, function(res) {
 		msg += chunk;
 	});
 	res.on('end', function() {
-		console.log(msg);
+		//console.log(msg);
+		var object = eval("("+msg+")");
+		
+		for(var i=0; i<object.length; i++ ) {
+			if ( object[i].StationID == (process.argv[2]||"107") ) {
+				//console.log(JSON.stringify(object[i]));
+				console.log("Estacion: " + object[i].StationName);
+				if ( parseInt(object[i].StationAvailableBikes) == 0 ) {
+					console.log("NO HAY BICICLETAS DISPONIBLES");
+				} else {
+					console.log("Enhorabuena!!! tienes " + object[i].StationAvailableBikes + " BICICLETAS DISPONIBLES");
+				}
+			}
+		} 
 	});
 });
 
