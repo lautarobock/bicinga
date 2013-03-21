@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CubeCash</title>
+    <link href="./css/style.css" rel="stylesheet">
+    <script src="./js/jquery-1.9.1.min.js"></script>
+    <script>
+        $.getJSON(
+                "bicing",
+                {stations: 107},
+                function(json) {
+                    $("#result").html(json[0].StationAvailableBikes);
+                }
+        );
+    </script>
+</head>
+<body>
+<div id="result">
+
+</div>
+</body>
+</html>
