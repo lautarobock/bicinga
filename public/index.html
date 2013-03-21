@@ -1,22 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CubeCash</title>
+    <title>Bicinga</title>
+	<!-- CSS -->
     <link href="./css/style.css" rel="stylesheet">
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+	<!-- JS -->
     <script src="./js/jquery-1.9.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
     <script>
-        $.getJSON(
+		function refresh() {
+			$.getJSON(
                 "bicing",
-                {stations: 107},
+                {stations: [107,36]},
                 function(json) {
-                    $("#result").html(json[0].StationAvailableBikes);
+					$("#content").fadeOut(300,function() {
+						$("#label1").html(json[0].StationName);
+		                $("#spaces1").html(json[0].StationAvailableBikes);
+						$("#label2").html(json[1].StationName);
+		                $("#spaces2").html(json[1].StationAvailableBikes);
+						$("#content").fadeIn(300,function() {
+							setTimeout(refresh,10000);	
+						});
+					});
+					
                 }
-        );
+        	);
+		}
+		refresh();		
     </script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<div id="result">
-
+<div id="content">
+	<div>
+		<label id="label1">Cargando...</label>:
+		<span id="spaces1">0</span>
+	</div>
+	<div>
+		<label id="label2">Cargando...</label>:
+		<span id="spaces2">0</span>
+	</div>
 </div>
 </body>
 </html>
