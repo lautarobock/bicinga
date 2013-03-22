@@ -1,1 +1,2 @@
 - Agregar tooltip con el numero y nombre de estacion a la que controla
+- Poner los colores del notification con respecto al que va a quedar arriba y poner el numero de bicis totales.
