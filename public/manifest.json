@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+
+  "name": "Bicinga",
+  "description": "BCN Bicing alert",
+  "version": "1.0.1",
+  
+  "background": {
+    "scripts": ["js/jquery-1.9.1.min.js","js/background.js"],
+    "persistent": false
+  },
+
+
+  "browser_action": {
+	"default_title": "Bicinga",
+    "default_icon": "img/green.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "http://bicinga.eu01.aws.af.cm/",
+	"notifications"
+  ],
+  "web_accessible_resources": [
+    "img/green.png","img/orange.png","img/red.png","img/black.png"
+  ],
+  "options_page": "options.html"
+}
