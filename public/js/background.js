@@ -7,13 +7,24 @@ var lastValue = -1;
 function refresh() {
 	var StationID = localStorage["StationID"];
 	if ( StationID ) {
-		StationID = parseInt(StationID);
+		//StationID = parseInt(StationID);
+		StationID = StationID.split(",");
 		$.getJSON(
 		    "http://bicinga.eu01.aws.af.cm/bicing",
-		    {stations: [StationID]},
+		    //{stations: [StationID]},
+			{stations: StationID},
 		    function(json) {
 				if ( json && json.length > 0 ) {
-					var total = parseInt(json[0].StationAvailableBikes);
+					//var total = parseInt(json[0].StationAvailableBikes);
+					var total = 0;
+					var title = "";
+					for ( var i=0; i<json.length; i++) {
+						total += parseInt(json[i].StationAvailableBikes);
+						title += json[i].StationID + " // ";
+					}
+					if ( json.length == 1) {
+						title = format(json[0].StationName);
+					}
 					if ( total != lastValue ) {
 						var icon;
 						var text = "";
@@ -32,12 +43,14 @@ function refresh() {
 							text = 'Tiene '+(lastValue-total)+' bicis menos.';
 						}
 						text = text + "Total: " + total;
-						showNotification(icon,format(json[0].StationName),text);
+						showNotification(icon,title,text);
 						chrome.browserAction.setIcon({path:icon});
 					}			
 					lastValue = total;
 					chrome.browserAction.setBadgeText({text: ""+(total)})
-					chrome.browserAction.setTitle({title:format(json[0].StationName) + ": " + total});
+					
+					
+					chrome.browserAction.setTitle({title:title + ": " + total});
 				} else {
 					chrome.browserAction.setIcon({path:"img/black.png"});
 					chrome.browserAction.setBadgeText({text: "X"})
