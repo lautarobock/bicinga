@@ -1,12 +1,43 @@
 function saveOptions() {
-  localStorage["StationID"] = $('#StationID').val();
 
-  // Update status to let user know options were saved.
-  var status = document.getElementById("status");
-  status.innerHTML = "Options Saved.";
-  setTimeout(function() {
-    status.innerHTML = "";
-  }, 750);
+	//validations
+	var errors = [];
+	
+	// pollingTime	
+	var pollingTime = $('#pollingTime').val();
+	if ( !isNumber(pollingTime) || parseInt(pollingTime) <= 0 ) {
+		errors.push("El Tiempo de refresco debe ser un valor numerico y positivo");
+	} else {
+		pollingTime = parseInt(pollingTime);
+	}
+
+	if ( errors.length == 0 ) {
+		localStorage["StationID"] = $('#StationID').val();
+		localStorage["pollingTime"] = pollingTime;
+
+		chrome.runtime.getBackgroundPage(function(bg) {
+			clearInterval(bg.loopTimeout);
+			bg.launchLoop();
+		});
+
+
+
+		// Update status to let user know options were saved.
+		var status = document.getElementById("status");
+		status.innerHTML = "Options Saved.";
+		setTimeout(function() {
+		status.innerHTML = "";
+		}, 750);	
+	} else {
+		var text = "";
+		for ( var i=0; i<errors.length; i++ ) {
+			text += '<p class="text-error">';
+			text += errors[i];
+			text += '</p>';
+		}
+		$('#status').html(text)
+	}
+
 }
 
 
@@ -14,4 +45,10 @@ function saveOptions() {
 document.addEventListener('DOMContentLoaded', function () {
 	document.querySelector('button').addEventListener('click', saveOptions);
 	$('#StationID').val(localStorage["StationID"]);
+	$('#pollingTime').val(localStorage["pollingTime"]);
 });
+
+
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}

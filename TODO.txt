@@ -1,2 +1,5 @@
-- Agregar tooltip con el numero y nombre de estacion a la que controla
-- Poner los colores del notification con respecto al que va a quedar arriba y poner el numero de bicis totales.
+- Cuando cambio de estacion debe detectarlo tambien en el loop y mostrar los valores
+- Multi Estacion
+- Cambiar txtField por combo. Ver si lo pongo fijo en el HTML o lo levanto del JSON (mejor la segunda por ahora)
+- Agregar checkbox con "enable/Disable"
+
