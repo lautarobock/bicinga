@@ -14,13 +14,13 @@ function saveOptions() {
 	if ( errors.length == 0 ) {
 		localStorage["StationID"] = $('#StationID').val();
 		localStorage["pollingTime"] = pollingTime;
-
+		localStorage["enabled"] = $('#enabled').is(":checked");
+		
 		chrome.runtime.getBackgroundPage(function(bg) {
-			clearInterval(bg.loopTimeout);
 			bg.launchLoop();
 		});
 
-
+		
 
 		// Update status to let user know options were saved.
 		var status = document.getElementById("status");
@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	document.querySelector('button').addEventListener('click', saveOptions);
 	$('#StationID').val(localStorage["StationID"]);
 	$('#pollingTime').val(localStorage["pollingTime"]);
+	$('#enabled').attr('checked', localStorage["enabled"]=="true");
 });
 
 

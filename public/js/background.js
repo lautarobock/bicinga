@@ -54,11 +54,18 @@ function refresh() {
 }
 
 function launchLoop() {
-	lastValue = -1;
-	var pollingTime = localStorage["pollingTime"] || 5;
-	pollingTime = pollingTime * 1000;
-	refresh();
-	loopTimeout = setInterval(refresh,pollingTime);
+	clearInterval(loopTimeout);
+	if ( localStorage["enabled"] == "true" ) {
+		lastValue = -1;
+		var pollingTime = localStorage["pollingTime"] || 5;
+		pollingTime = pollingTime * 1000;
+		refresh();
+		loopTimeout = setInterval(refresh,pollingTime);
+	} else {
+		chrome.browserAction.setIcon({path:"img/black.png"});
+		chrome.browserAction.setBadgeText({text: "X"})
+		chrome.browserAction.setTitle({title:"None: X"});		
+	}
 }
 
 launchLoop();
@@ -73,7 +80,7 @@ function showNotification(icon,title,text) {
 	notification.show();
 	setTimeout(function() {
 		notification.cancel();
-	},5000);	
+	},8000);	
 }
 
 function format(string) {
