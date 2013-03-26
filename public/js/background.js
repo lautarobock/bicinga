@@ -53,7 +53,7 @@ function refresh() {
 					
 					chrome.browserAction.setBadgeText({text: ""+(total)})
 					
-					chrome.browserAction.setTitle({title: "" + json.length + " estaciones: " + json[i].StationAvailableBikes});
+					chrome.browserAction.setTitle({title: "" + json.length + " estaciones: " + total});
 				} else {
 					chrome.browserAction.setIcon({path:"img/black.png"});
 					chrome.browserAction.setBadgeText({text: "X"})
