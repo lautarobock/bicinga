@@ -1,6 +1,5 @@
-- Cuando cambio de estacion debe detectarlo tambien en el loop y mostrar los valores (esto se va a mejorar con el multi estacion)
 - Multi Estacion
-** Podria distingir de los que suman a la notificacion y los que se muestran al abrir el popup. (ppales y secundarios)
-** Quiza podria mostrar una notificacion por cada estacion en caso de que sea necesario. Y en el icono si mostrar la suma.
-- Cambiar txtField por combo. Ver si lo pongo fijo en el HTML o lo levanto del JSON (mejor la segunda por ahora)
+** Estaciones ppales y secundarias.
+- (por ahora no) Cambiar txtField por combo. Ver si lo pongo fijo en el HTML o lo levanto del JSON (mejor la segunda por ahora)
 - Ubicar las estaciones mas cercanas por geolocalizaion. http://html5doctor.com/finding-your-position-with-geolocation/
+-- Falta la geolocalizacion

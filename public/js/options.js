@@ -51,6 +51,9 @@ function getNearest() {
 			if ( json && json.length > 0 ) {
 				var miLat = localStorage["latitud"]*SCALE;
 				var miLng = localStorage["longitud"]*SCALE;
+				if ( !miLat && !miLng && navigator.geolocation ) {
+					
+				}
 				if ( miLat && miLng ) {
 					var actual;
 					var station;
@@ -92,14 +95,38 @@ function changeStationID() {
 			}
 	    }
 	);
+}
 
-
+function getMyCoord() {
+	if (navigator.geolocation) {
+		var timeoutVal = 10 * 1000 * 1000;
+		var displayPosition = function(position) {			
+			$('#latitud').val(position.coords.latitude);
+			$('#longitud').val(position.coords.longitude);
+		}
+		var displayError = function (error) {
+			var status = document.getElementById("status");
+			status.innerHTML = error.code;
+			setTimeout(function() {
+				status.innerHTML = "";
+			}, 750);
+		}
+		navigator.geolocation.getCurrentPosition(displayPosition, displayError, { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 });
+	} else {
+		var status = document.getElementById("status");
+		status.innerHTML = "Geolocation is not supported by this browser";
+		setTimeout(function() {
+			status.innerHTML = "";
+		}, 750);
+	}
 }
 
 document.addEventListener('DOMContentLoaded', function () {
 //	document.querySelector('button').addEventListener('click', saveOptions);
 	document.getElementById('btnSave').addEventListener('click', saveOptions);
 	document.getElementById('btnNearest').addEventListener('click', getNearest);
+	document.getElementById('btnMyCoord').addEventListener('click', getMyCoord);
+
 	$('#StationID').change(changeStationID);
 	$('#StationID').val(localStorage["StationID"]);	
 	changeStationID();

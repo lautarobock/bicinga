@@ -9,18 +9,18 @@ function refresh() {
 			{stations: StationID},
 		    function(json) {
 				if ( json && json.length > 0 ) {
-					var total = parseInt(json[0].StationAvailableBikes);
-					var icon;
-					if ( total == 0 ) {
-						icon = "img/red.png";
-					} else if ( total < 5 ) {
-						icon = "img/orange.png";
-					} else {
-						icon = "img/green.png";
-					}
 					$("#content").fadeOut(300,function() {
 						$("#content").html("");
 						for ( var i=0; i<json.length; i++ ) {
+							var total = parseInt(json[i].StationAvailableBikes);
+							var icon;
+							if ( total == 0 ) {
+								icon = "img/red.png";
+							} else if ( total < 5 ) {
+								icon = "img/orange.png";
+							} else {
+								icon = "img/green.png";
+							}
 							var div = $("<div></div>");
 							var inner = "<img src='"+icon+"'></img>" + "<label>"+json[i].StationName+": </label>" + "<span>"+json[i].StationAvailableBikes+"</span>";
 							div.html(inner);
