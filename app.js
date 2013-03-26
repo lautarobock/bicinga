@@ -63,6 +63,9 @@ app.configure('development', function(){
 //Resume Services
 var resume = require("./routes/bicing.js");
 app.get('/bicing',resume.findAll);
+//app.get('/station',resume.stationAll);
+//app.get('/station/:id',resume.stationById);
+
 
 
 http.createServer(app).listen(app.get('port'), function(){
