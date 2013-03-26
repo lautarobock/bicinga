@@ -3,4 +3,4 @@
 ** Podria distingir de los que suman a la notificacion y los que se muestran al abrir el popup. (ppales y secundarios)
 ** Quiza podria mostrar una notificacion por cada estacion en caso de que sea necesario. Y en el icono si mostrar la suma.
 - Cambiar txtField por combo. Ver si lo pongo fijo en el HTML o lo levanto del JSON (mejor la segunda por ahora)
-- Armar el servicio que devuelve todas las estaciones (ID,Name).
+- Ubicar las estaciones mas cercanas por geolocalizaion. http://html5doctor.com/finding-your-position-with-geolocation/
