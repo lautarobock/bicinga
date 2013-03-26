@@ -2,7 +2,7 @@ chrome.browserAction.setIcon({path:"img/green.png"});
 
 var loopTimeout;
 
-var lastValue = -1;
+var values = {};
 
 function refresh() {
 	var StationID = localStorage["StationID"];
@@ -15,42 +15,45 @@ function refresh() {
 			{stations: StationID},
 		    function(json) {
 				if ( json && json.length > 0 ) {
-					//var total = parseInt(json[0].StationAvailableBikes);
 					var total = 0;
-					var title = "";
-					for ( var i=0; i<json.length; i++) {
-						total += parseInt(json[i].StationAvailableBikes);
-						title += json[i].StationID + " // ";
+					for ( var i=0; i<json.length; i++ ) {						
+						var stationActual = parseInt(json[i].StationAvailableBikes);
+						var stationLast = values[json[i].StationID]||-1;
+						values[json[i].StationID] = stationActual;
+						total += stationActual;
+						if ( stationActual != stationLast ) {
+							var icon;
+							var text = "";
+							if ( stationActual == 0 ) {
+								text = 'No tiene mas bicicletas disponibles en la estacion.';
+								icon = "img/red.png";
+							} else if ( stationActual < 5 ) {
+								icon = "img/orange.png";
+							} else {
+								icon = "img/green.png";
+							}
+							if ( stationActual != 0 && stationLast != -1 && stationActual > stationLast ) {
+								text = 'Tiene '+(stationActual-stationLast)+' bicis nuevas.';
+							}
+							if ( stationActual != 0 && stationLast != -1 && stationActual < stationLast ) {
+								text = 'Tiene '+(stationLast-stationActual)+' bicis menos.';
+							}
+							text = text + "Total: " + stationActual;
+							showNotification(icon,json[i].StationName,text);
+							
+						}	
 					}
-					if ( json.length == 1) {
-						title = format(json[0].StationName);
+					if ( total == 0 ) {
+						chrome.browserAction.setIcon({path:"img/red.png"});
+					} else if ( total < 5 ) {
+						chrome.browserAction.setIcon({path:"img/orange.png"});
+					} else {
+						chrome.browserAction.setIcon({path:"img/green.png"});
 					}
-					if ( total != lastValue ) {
-						var icon;
-						var text = "";
-						if ( total == 0 ) {
-							text = 'No tiene mas bicicletas disponibles en la estacion.';
-							icon = "img/red.png";
-						} else if ( total < 5 ) {
-							icon = "img/orange.png";
-						} else {
-							icon = "img/green.png";
-						}
-						if ( total != 0 && lastValue != -1 && total > lastValue ) {
-							text = 'Tiene '+(total-lastValue)+' bicis nuevas.';
-						}
-						if ( total != 0 && lastValue != -1 && total < lastValue ) {
-							text = 'Tiene '+(lastValue-total)+' bicis menos.';
-						}
-						text = text + "Total: " + total;
-						showNotification(icon,title,text);
-						chrome.browserAction.setIcon({path:icon});
-					}			
-					lastValue = total;
+					
 					chrome.browserAction.setBadgeText({text: ""+(total)})
 					
-					
-					chrome.browserAction.setTitle({title:title + ": " + total});
+					chrome.browserAction.setTitle({title: "" + json.length + " estaciones: " + json[i].StationAvailableBikes});
 				} else {
 					chrome.browserAction.setIcon({path:"img/black.png"});
 					chrome.browserAction.setBadgeText({text: "X"})
@@ -69,7 +72,7 @@ function refresh() {
 function launchLoop() {
 	clearInterval(loopTimeout);
 	if ( localStorage["enabled"] == "true" ) {
-		lastValue = -1;
+		values = {};
 		var pollingTime = localStorage["pollingTime"] || 5;
 		pollingTime = pollingTime * 1000;
 		refresh();
@@ -82,6 +85,7 @@ function launchLoop() {
 }
 
 launchLoop();
+
 
 function showNotification(icon,title,text) {
 	var notification = webkitNotifications.createNotification(

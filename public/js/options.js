@@ -15,6 +15,8 @@ function saveOptions() {
 		localStorage["StationID"] = $('#StationID').val();
 		localStorage["pollingTime"] = pollingTime;
 		localStorage["enabled"] = $('#enabled').is(":checked");
+		localStorage["latitud"] = $('#latitud').val();
+		localStorage["longitud"] = $('#longitud').val();
 		
 		chrome.runtime.getBackgroundPage(function(bg) {
 			bg.launchLoop();
@@ -40,13 +42,71 @@ function saveOptions() {
 
 }
 
+var SCALE = 1000000;
+function getNearest() {
+	$.getJSON(
+	    "http://bicinga.eu01.aws.af.cm/bicing",
+		{},
+	    function(json) {
+			if ( json && json.length > 0 ) {
+				var miLat = localStorage["latitud"]*SCALE;
+				var miLng = localStorage["longitud"]*SCALE;
+				if ( miLat && miLng ) {
+					var actual;
+					var station;
+					for ( var i=0; i<json.length; i++ ) {		
+						var lat = json[i].AddressGmapsLatitude*SCALE;
+						var lng = json[i].AddressGmapsLongitude*SCALE;
+						var dist = Math.sqrt(Math.pow(miLat-lat,2)+Math.pow(miLng-lng,2));
+						if ( !actual || dist < actual ) {
+							actual = dist;
+							station = json[i];
+						}
+					}
+					$('#StationID').val(station.StationID);
+					$('#StationName').html(station.StationName);
+				}
+			}
+	    }
+	);	
+}
 
+
+
+function changeStationID() {
+	var values = $('#StationID').val();
+	var text = "";
+	if ( (values instanceof Array) ) {
+		values = values[0];
+	}
+	$.getJSON(
+	    "http://bicinga.eu01.aws.af.cm/bicing",
+		{},
+	    function(json) {
+			if ( json && json.length > 0 ) {
+				for ( var i=0; i<json.length; i++ ) {		
+					if ( json[i].StationID == values ) {
+						$('#StationName').html(json[i].StationName);
+					}
+				}
+			}
+	    }
+	);
+
+
+}
 
 document.addEventListener('DOMContentLoaded', function () {
-	document.querySelector('button').addEventListener('click', saveOptions);
-	$('#StationID').val(localStorage["StationID"]);
+//	document.querySelector('button').addEventListener('click', saveOptions);
+	document.getElementById('btnSave').addEventListener('click', saveOptions);
+	document.getElementById('btnNearest').addEventListener('click', getNearest);
+	$('#StationID').change(changeStationID);
+	$('#StationID').val(localStorage["StationID"]);	
+	changeStationID();
 	$('#pollingTime').val(localStorage["pollingTime"]);
 	$('#enabled').attr('checked', localStorage["enabled"]=="true");
+	$('#latitud').val(localStorage["latitud"]);
+	$('#longitud').val(localStorage["longitud"]);
 });
 
 

@@ -20,6 +20,8 @@
 		</dt>
 		<dd>
 			<input type="text" id="StationID" name="StationID" ></input>
+			<button id="btnNearest" class="btn btn-link" onclick="alert('hola')">Mas Cercana</button>
+			<span style="margin-left:10px" id="StationName"></span>
 		</dd>
 		<dt>
 			<label>Tiempo de refresco (s):</label>
@@ -35,10 +37,25 @@
 			<input type="checkbox" id="enabled" style="margin-bottom:8px"></input>			
 		</dd>
 	</dl>
+	<dl class="dl-horizontal" id="advanced">
+		<dt>
+			<label>Latitud:</label>
+		</dt>
+		<dd>
+			<input type="text" id="latitud"></input>
+		</dd>
+		<dt>
+			<label>Logitud:</label>
+		</dt>
+		<dd>
+			<input type="text" id="longitud"></input>
+		</dd>
+	</dl>
 	<hr/>
-	<button id="save">Guardar</button>
+	<button id="btnSave" class="btn">Guardar</button>
 	<br/>
 	<div id="status"></div>
 </div>
 </body>
 </html>
+<!--41.398536,2.153092-->
