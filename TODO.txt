@@ -1,5 +1,5 @@
 - Multi Estacion
 ** Estaciones ppales y secundarias.
 - (por ahora no) Cambiar txtField por combo. Ver si lo pongo fijo en el HTML o lo levanto del JSON (mejor la segunda por ahora)
+- Deberia seleccionar por Drag&Drop las estaciones principales (notifican y suman) y las secundarias (solo notifican)
 - Ubicar las estaciones mas cercanas por geolocalizaion. http://html5doctor.com/finding-your-position-with-geolocation/
--- Falta la geolocalizacion

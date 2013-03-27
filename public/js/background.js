@@ -18,7 +18,10 @@ function refresh() {
 					var total = 0;
 					for ( var i=0; i<json.length; i++ ) {						
 						var stationActual = parseInt(json[i].StationAvailableBikes);
-						var stationLast = values[json[i].StationID]||-1;
+						var stationLast = values[json[i].StationID];
+						if ( typeof stationLast === "undefined" ) {
+							stationLast = -1;
+						}
 						values[json[i].StationID] = stationActual;
 						total += stationActual;
 						if ( stationActual != stationLast ) {
@@ -40,7 +43,6 @@ function refresh() {
 							}
 							text = text + "Total: " + stationActual;
 							showNotification(icon,json[i].StationName,text);
-							
 						}	
 					}
 					if ( total == 0 ) {

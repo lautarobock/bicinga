@@ -1,5 +1,5 @@
 function saveOptions() {
-
+	clearErrors();
 	//validations
 	var errors = [];
 	
@@ -22,24 +22,40 @@ function saveOptions() {
 			bg.launchLoop();
 		});
 
-		
-
 		// Update status to let user know options were saved.
-		var status = document.getElementById("status");
-		status.innerHTML = "Options Saved.";
-		setTimeout(function() {
-		status.innerHTML = "";
-		}, 750);	
+		showMessage("Opciones guardadas");
 	} else {
-		var text = "";
-		for ( var i=0; i<errors.length; i++ ) {
-			text += '<p class="text-error">';
-			text += errors[i];
-			text += '</p>';
-		}
-		$('#status').html(text)
+		showErrors(errors);
 	}
 
+}
+
+function cancelOptions() {
+	location.reload();
+}
+
+function clearErrors() {
+	$('#status-error').html("");
+	$('#status-error').css("display","none");
+}
+function showErrors(errors) {
+	var text = "";
+	for ( var i=0; i<errors.length; i++ ) {
+		text += '<span>';
+		text += errors[i];
+		text += '</span>';
+	}
+	$('#status-error').css("display","block");
+	$('#status-error').html(text);
+}
+
+function showMessage(text,delay) {
+	$('#status').css("display","block");
+	$('#status').html(text);
+	setTimeout(function() {
+		$('#status').html("");
+		$('#status').css("display","none");
+	}, delay||1000);
 }
 
 var SCALE = 1000000;
@@ -59,13 +75,18 @@ function internalGetNearest(json, miLat, miLng) {
         }
     }
     $('#StationID').val(station.StationID);
-    var gmURL = "https://maps.google.es/maps?saddr=@sourceLat@,@sourceLng@&daddr=@targetLat@,@targetLng@&t=m&z=17&dirflg=w";
+    showStationData(station, miLat, miLng);
+}
+
+function showStationData(station,miLat,miLng) {
+	var gmURL = "https://maps.google.es/maps?saddr=@sourceLat@,@sourceLng@&daddr=@targetLat@,@targetLng@&t=m&z=17&dirflg=w";
     gmURL = gmURL.replace("@sourceLat@",miLat);
     gmURL = gmURL.replace("@sourceLng@",miLng);
     gmURL = gmURL.replace("@targetLat@",station.AddressGmapsLatitude);
     gmURL = gmURL.replace("@targetLng@",station.AddressGmapsLongitude);
-    $('#StationName').html(station.StationName + " (<a href='"+gmURL+"' class='btn btn-link'>Como llegar</a>)");
+    $('#StationName').html(station.StationName + " (<a target='gmap' href='"+gmURL+"' style='padding:0' class='btn btn-link'>Como llegar</a>)");
 }
+
 function getNearest() {
 	$.getJSON(
 	    "http://bicinga.eu01.aws.af.cm/bicing",
@@ -88,7 +109,23 @@ function getNearest() {
 	);	
 }
 
-
+/**
+ * Devuelve las coordenadas guardadas si las hubiese y si no las de HTML5 si fuese posible
+ * @param callback
+ */
+function getFinalCoords(callback) {
+	var miLat = localStorage["latitud"];
+	var miLng = localStorage["longitud"];
+	if ( !miLat && !miLng && navigator.geolocation ) { 
+        getCurrentPosition(function(position) {
+            callback(position.coords.latitude, position.coords.longitude);
+        });
+	} else if ( miLat && miLng ) {
+		callback(miLat, miLng);
+    } else {
+    	callback(null,null,"No es posible obtener coordenadas");
+    }
+}
 
 function changeStationID() {
 	var values = $('#StationID').val();
@@ -103,7 +140,14 @@ function changeStationID() {
 			if ( json && json.length > 0 ) {
 				for ( var i=0; i<json.length; i++ ) {		
 					if ( json[i].StationID == values ) {
-						$('#StationName').html(json[i].StationName);
+						var station = json[i];
+						getFinalCoords(function(lat,lng,err) {
+							if ( !err ) {
+								showStationData(station, lat, lng);	
+							} else {
+								alert(err);
+							}
+						});
 					}
 				}
 			}
@@ -112,11 +156,7 @@ function changeStationID() {
 }
 
 function displayError(error) {
-    var status = document.getElementById("status");
-    status.innerHTML = error.code;
-    setTimeout(function() {
-        status.innerHTML = "";
-    }, 750);
+	showMessage(error.code);
 }
 
 function getCurrentPosition(callback) {
@@ -129,31 +169,32 @@ function getMyCoord() {
 		var displayPosition = function(position) {
 			$('#latitud').val(position.coords.latitude);
 			$('#longitud').val(position.coords.longitude);
-		}
+		};
 		getCurrentPosition(displayPosition);
 	} else {
-		var status = document.getElementById("status");
-		status.innerHTML = "Geolocation is not supported by this browser";
-		setTimeout(function() {
-			status.innerHTML = "";
-		}, 750);
+		showMessage("Geolocation is not supported by this browser");
 	}
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-//	document.querySelector('button').addEventListener('click', saveOptions);
 	document.getElementById('btnSave').addEventListener('click', saveOptions);
+	document.getElementById('btnCancel').addEventListener('click', cancelOptions);
 	document.getElementById('btnNearest').addEventListener('click', getNearest);
 	document.getElementById('btnMyCoord').addEventListener('click', getMyCoord);
 
+	loadStoreData();
+});
+
+function loadStoreData() {
 	$('#StationID').change(changeStationID);
 	$('#StationID').val(localStorage["StationID"]);	
 	changeStationID();
 	$('#pollingTime').val(localStorage["pollingTime"]);
+	$('#enabled').removeAttr('checked');
 	$('#enabled').attr('checked', localStorage["enabled"]=="true");
 	$('#latitud').val(localStorage["latitud"]);
 	$('#longitud').val(localStorage["longitud"]);
-});
+}
 
 
 function isNumber(n) {
