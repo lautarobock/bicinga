@@ -128,18 +128,19 @@ function getFinalCoords(callback) {
 }
 
 function changeStationID() {
-	var values = $('#StationID').val();
+	var values = $('#StationID').val().split(",");
 	var text = "";
-	if ( (values instanceof Array) ) {
-		values = values[0];
-	}
+//	if ( (values instanceof Array) ) {
+//		values = values[0];
+//	}
 	$.getJSON(
 	    "http://bicinga.eu01.aws.af.cm/bicing",
-		{},
+		{stations:values},
 	    function(json) {
 			if ( json && json.length > 0 ) {
-				for ( var i=0; i<json.length; i++ ) {		
-					if ( json[i].StationID == values ) {
+				for ( var i=0; i<json.length; i++ ) {	
+					//Lo hago solo con la primera
+					if ( json[i].StationID == values[0]) {
 						var station = json[i];
 						getFinalCoords(function(lat,lng,err) {
 							if ( !err ) {
