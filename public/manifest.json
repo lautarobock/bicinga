@@ -6,7 +6,7 @@
   "version": "1.1",
   
   "background": {
-    "scripts": ["js/jquery-1.9.1.min.js","js/background.js"],
+    "scripts": ["js/jquery-1.9.1.min.js","js/encoding.js","js/background.js"],
     "persistent": false
   },
 

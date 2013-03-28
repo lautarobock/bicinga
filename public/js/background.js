@@ -53,19 +53,19 @@ function refresh() {
 						chrome.browserAction.setIcon({path:"img/green.png"});
 					}
 					
-					chrome.browserAction.setBadgeText({text: ""+(total)})
+					chrome.browserAction.setBadgeText({text: ""+(total)});
 					
 					chrome.browserAction.setTitle({title: "" + json.length + " estaciones: " + total});
 				} else {
 					chrome.browserAction.setIcon({path:"img/black.png"});
-					chrome.browserAction.setBadgeText({text: "X"})
+					chrome.browserAction.setBadgeText({text: "X"});
 					chrome.browserAction.setTitle({title:"None: X"});
 				}
 		    }
 		);	
 	} else {
 		chrome.browserAction.setIcon({path:"img/black.png"});
-		chrome.browserAction.setBadgeText({text: "X"})
+		chrome.browserAction.setBadgeText({text: "X"});
 		chrome.browserAction.setTitle({title:"None: X"});
 	}
 
@@ -81,7 +81,7 @@ function launchLoop() {
 		loopTimeout = setInterval(refresh,pollingTime);
 	} else {
 		chrome.browserAction.setIcon({path:"img/black.png"});
-		chrome.browserAction.setBadgeText({text: "X"})
+		chrome.browserAction.setBadgeText({text: "X"});
 		chrome.browserAction.setTitle({title:"None: X"});		
 	}
 }
@@ -92,7 +92,7 @@ launchLoop();
 function showNotification(icon,title,text) {
 	var notification = webkitNotifications.createNotification(
 	  icon,
-	  title,
+	  format(title),
 	  text
 	);
 	
@@ -103,5 +103,7 @@ function showNotification(icon,title,text) {
 }
 
 function format(string) {
-	return string.replace('&Agrave;','Á');
+//	return string.replace('&Agrave;','Á');
+	return entityToHtml(string);
 }
+
