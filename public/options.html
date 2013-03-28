@@ -15,45 +15,47 @@
 <body>
 <div>
 	<h4>Bicinga - Configuraciones</h4>
-	<dl class="dl-horizontal">
-		<dt>
-			<label>Station ID:</label>
-		</dt>
-		<dd>
-			<input type="text" id="StationID" name="StationID" ></input>
-			<button id="btnNearest" class="btn btn-link">Mas Cercana</button>
-			<div style="margin-left:10px;display:inline!important" id="StationName"></div>
-		</dd>
-		<dt>
-			<label>Tiempo de refresco (s):</label>
-		</dt>
-		<dd>
-			<input type="text" id="pollingTime"></input>
-			
-		</dd>
-		<dt>
-			<label>Habilitado:</label>
-		</dt>
-		<dd>
-			<input type="checkbox" id="enabled" style="margin-bottom:8px"></input>			
-		</dd>
-	</dl>
-	<dl class="dl-horizontal" id="advanced">
-		<dt>
-			<label>Latitud:</label>
-		</dt>
-		<dd>
-			<input type="text" id="latitud"></input>
-		</dd>
-		<dt>
-			<label>Logitud:</label>
-		</dt>
-		<dd>
-			<input type="text" id="longitud"></input>
-			<button id="btnMyCoord" class="btn btn-link">Obtener</button>
-		</dd>		
-	</dl>
-	<hr/>
+	<div class="well well-small">
+		<dl class="dl-horizontal">
+			<dt>
+				<label>Station ID:</label>
+			</dt>
+			<dd>
+				<input type="text" id="StationID" name="StationID" ></input>
+				<button id="btnNearest" class="btn btn-link">Mas Cercana</button>
+				<div style="margin-left:10px;display:inline!important" id="StationName"></div>
+			</dd>
+			<dt>
+				<label>Tiempo de refresco (s):</label>
+			</dt>
+			<dd>
+				<input type="text" id="pollingTime"></input>
+				
+			</dd>
+			<dt>
+				<label>Habilitado:</label>
+			</dt>
+			<dd>
+				<input type="checkbox" id="enabled" style="margin-bottom:8px"></input>			
+			</dd>
+		</dl>
+		<dl class="dl-horizontal" id="advanced">
+			<dt>
+				<label>Latitud:</label>
+			</dt>
+			<dd>
+				<input type="text" id="latitud"></input>
+			</dd>
+			<dt>
+				<label>Logitud:</label>
+			</dt>
+			<dd>
+				<input type="text" id="longitud"></input>
+				<button id="btnMyCoord" class="btn btn-link">Obtener</button>
+			</dd>		
+		</dl>
+	</div>
+<!-- 	<hr/> -->
 	<button style="margin: 10px" id="btnSave" class="btn btn-primary">Guardar</button>
 	<button style="margin: 10px" id="btnCancel" class="btn">Cancelar</button>
 	<br/>
