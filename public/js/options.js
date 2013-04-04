@@ -17,6 +17,7 @@ function saveOptions() {
 		localStorage["enabled"] = $('#enabled').is(":checked");
 		localStorage["latitud"] = $('#latitud').val();
 		localStorage["longitud"] = $('#longitud').val();
+		localStorage["popupTime"] = $('#popupTime').val();
 		
 		chrome.runtime.getBackgroundPage(function(bg) {
 			bg.launchLoop();
@@ -195,6 +196,7 @@ function loadStoreData() {
 	$('#enabled').attr('checked', localStorage["enabled"]=="true");
 	$('#latitud').val(localStorage["latitud"]);
 	$('#longitud').val(localStorage["longitud"]);
+	$('#popupTime').val(localStorage["popupTime"]);
 }
 
 

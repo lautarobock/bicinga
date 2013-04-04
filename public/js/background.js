@@ -90,6 +90,8 @@ launchLoop();
 
 
 function showNotification(icon,title,text) {
+	var time = localStorage["popupTime"] || 8;
+	time = time * 1000;
 	var notification = webkitNotifications.createNotification(
 	  icon,
 	  format(title),
@@ -99,7 +101,7 @@ function showNotification(icon,title,text) {
 	notification.show();
 	setTimeout(function() {
 		notification.cancel();
-	},8000);	
+	},time);	
 }
 
 function format(string) {
