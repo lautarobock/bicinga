@@ -7,7 +7,7 @@
   
   "background": {
     "scripts": ["js/jquery-1.9.1.min.js","js/encoding.js","js/background.js"],
-    "persistent": false
+    "persistent": true
   },
 
 
